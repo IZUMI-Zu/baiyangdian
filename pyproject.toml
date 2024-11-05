@@ -11,36 +11,14 @@ netcdf4 = "^1.7.1.post2"
 pandas = "^2.2.3"
 numpy = "^2.1.2"
 xlrd = "^2.0.1"
-
+xarray = "^2024.10.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.9"
-black = "^24.10.0"
+
+[tool.poetry.scripts]
+predict = "predict.main:main"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-
-[tool.ruff]
-line-length = 120
-
-[tool.ruff.lint]
-select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "I",  # isort
-    "B",  # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "N",  # PEP8 naming convetions
-    "D"  # pydocstyle
-]
-ignore = [
-    "C901",  # too complex
-    "W191",  # indentation contains tabs
-    "D401"  # imperative mood
-]
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"
