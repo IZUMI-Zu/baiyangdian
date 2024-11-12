@@ -6,7 +6,7 @@ authors = ["IZUMI-Zu <274620705z@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 netcdf4 = "^1.7.1.post2"
 pandas = "^2.2.3"
 numpy = "^2.1.2"
