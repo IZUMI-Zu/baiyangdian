@@ -1,7 +1,8 @@
 import xarray as xr
 import pandas as pd
 import numpy as np
-
+import xlrd
+import math
 
 from .column_mappings import RESERVOIR_COLUMNS_MAP, NUMERIC_COLUMNS
 from ..utils import load_csv_data
@@ -76,5 +77,9 @@ def process_reservoir_data(df):
     return df
 
 def load_xls_data(file_path):
-    """Load XLS file and return as pandas DataFrame."""
-    return pd.read_excel(file_path)
+    df = pd.read_excel(file_path, sheet_name=0, engine='xlrd')
+    return df
+
+def load_xlsx_data(file_path):
+    df = pd.read_excel(file_path, sheet_name=0, engine='openpyxl')
+    return df
