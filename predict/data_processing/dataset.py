@@ -1,6 +1,7 @@
 import pandas as pd
 import torch
-from torch.utils.data import Dataset
+from sklearn.model_selection import train_test_split
+from torch.utils.data import Dataset, DataLoader
 from pathlib import Path
 from typing import Union, Tuple, Callable, Optional
 import logging
@@ -108,3 +109,48 @@ class BaiyangdianDataset(Dataset):
         feature = torch.tensor(feature, dtype=torch.float32)
         label = torch.tensor(label, dtype=torch.float32)
         return feature, label
+
+
+def create_data_loaders(dataset, batch_size=32, train_ratio=0.7, val_ratio=0.15, random_state=42):
+    """
+    使用scikit-learn划分数据集并创建DataLoader
+    """
+    # 计算数据集大小
+    total_size = len(dataset)
+    train_size = int(train_ratio * total_size)
+    val_size = int(val_ratio * total_size)
+    test_size = total_size - train_size - val_size
+    
+    # 使用scikit-learn进行划分
+    train_indices, temp_indices = train_test_split(
+        range(total_size), 
+        train_size=train_size,
+        random_state=random_state
+    )
+    
+    val_indices, test_indices = train_test_split(
+        temp_indices,
+        train_size=val_size,
+        random_state=random_state
+    )
+    
+    # 创建数据加载器
+    train_loader = DataLoader(
+        dataset,
+        batch_size=batch_size,
+        sampler=torch.utils.data.SubsetRandomSampler(train_indices)
+    )
+    
+    val_loader = DataLoader(
+        dataset,
+        batch_size=batch_size,
+        sampler=torch.utils.data.SubsetRandomSampler(val_indices)
+    )
+    
+    test_loader = DataLoader(
+        dataset,
+        batch_size=batch_size,
+        sampler=torch.utils.data.SubsetRandomSampler(test_indices)
+    )
+    
+    return train_loader, val_loader, test_loader
