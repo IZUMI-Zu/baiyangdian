@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "dataframe",
+        "fillna",
         "prcp",
         "xarray"
     ]

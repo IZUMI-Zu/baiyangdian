@@ -1,5 +1,5 @@
 import pandas as df
-from .data_processing.load_data import load_nc_data
+from ..predict.data_processing.load_data import load_nc_data
 
 # df = load_nc_data('./data/20210101.nc')
 # print(df)
