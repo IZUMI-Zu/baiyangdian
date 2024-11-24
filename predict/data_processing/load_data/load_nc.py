@@ -6,33 +6,54 @@ logger = logging.getLogger(__name__)
 
 def load_nc_data(file_path):
     """
-    从 NetCDF 文件读取数据并转化为 Pandas DataFrame。
+    Read data from NetCDF file and convert to Pandas DataFrame.
     
-    :param file_path: NetCDF 文件路径
-    :return: 包含每个变量数据的字典，键为变量名，值为对应的 DataFrame。
+    :param file_path: Path to NetCDF file
+    :return: List of DataFrames containing data for each variable. Returns empty list if file reading fails.
     """
-    # 打开 NetCDF 文件
-    nc_file = Dataset(file_path, 'r')
-    
-    # 打印变量列表
-    logger.info(f"Variables in the netCDF file: {list(nc_file.variables)}")
-    
-    # 创建一个字典来存储每个变量的数据
-    dataFrames = {}
-    
-    # 遍历所有变量，读取数据并转换为 DataFrame
-    for var_name in nc_file.variables:
-        var_data = nc_file.variables[var_name][:]
+    try:
+        # Open NetCDF file
+        nc_file = Dataset(file_path, 'r')
         
-        # 处理变量数据，生成 DataFrame
-        if len(var_data.shape) == 1:  # 如果数据是一维
-            dataFrames[var_name] = pd.DataFrame(var_data, columns=[var_name])
-        elif len(var_data.shape) == 2:  # 如果数据是二维
-            dataFrames[var_name] = pd.DataFrame(var_data, columns=[f'{var_name}_col_{i}' for i in range(var_data.shape[1])])
-        elif len(var_data.shape) == 3:  # 如果数据是三维
-            dataFrames[var_name] = pd.DataFrame(var_data.reshape(-1, var_data.shape[-1]), columns=[f'{var_name}_dim_{i}' for i in range(var_data.shape[-1])])
-    
-    # 关闭文件
-    nc_file.close()
-    
-    return dataFrames
+        # Print variable list
+        logger.info(f"Variables in the netCDF file: {list(nc_file.variables)}")
+        
+        # Create a list to store DataFrames for each variable
+        dataFrames = []
+        
+        # Iterate through variables, read data and convert to DataFrame
+        for var_name in nc_file.variables:
+            var_data = nc_file.variables[var_name][:]
+            
+            # Skip empty data
+            if var_data.size == 0:
+                continue
+                
+            # Process variable data and generate DataFrame
+            if len(var_data.shape) == 1:
+                df = pd.DataFrame(var_data, columns=[var_name])
+                dataFrames.append(df)
+            elif len(var_data.shape) == 2:
+                df = pd.DataFrame(var_data, columns=[f'{var_name}_col_{i}' for i in range(var_data.shape[1])])
+                dataFrames.append(df)
+            elif len(var_data.shape) == 3:
+                df = pd.DataFrame(var_data.reshape(-1, var_data.shape[-1]), columns=[f'{var_name}_dim_{i}' for i in range(var_data.shape[-1])])
+                dataFrames.append(df)
+        
+        # Close file
+        nc_file.close()
+        
+        # Return the first DataFrame if there's only one, otherwise concatenate all
+        if not dataFrames:
+            return pd.DataFrame()  # Return empty DataFrame instead of empty list
+        elif len(dataFrames) == 1:
+            return dataFrames[0]
+        else:
+            return pd.concat(dataFrames, axis=1)
+            
+    except OSError as e:
+        logger.error(f"Cannot read NetCDF file {file_path}: {str(e)}")
+        return pd.DataFrame()  # Return empty DataFrame instead of empty list
+    except Exception as e:
+        logger.error(f"Error processing NetCDF file {file_path}: {str(e)}")
+        return pd.DataFrame()  # Return empty DataFrame instead of empty list

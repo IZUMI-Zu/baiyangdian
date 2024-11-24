@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
+        "Baiyangdian",
         "dataframe",
         "fillna",
+        "iloc",
         "prcp",
         "xarray"
     ]
