@@ -88,6 +88,9 @@ class BaiyangdianDataset(Dataset):
         if self.processed_data is None:
             raise ValueError("No data has been processed.")
             
+        # Debug: Print available columns
+        self.logger.info(f"Available columns: {self.processed_data.columns.tolist()}")
+        
         # Get the shape of the first feature
         first_feature = self.processed_data.iloc[0].drop(self.target_column).values
         # Assuming the feature can be reshaped into a square matrix
