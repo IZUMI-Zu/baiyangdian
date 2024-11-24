@@ -36,7 +36,11 @@ def main(args):
     )
     
     # 初始化模型
-    model = WaterLevelCNN().to(device)
+    model = WaterLevelCNN(
+        input_height=dataset.input_height,
+        input_width=dataset.input_width
+    ).to(device)
+
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(

@@ -41,6 +41,11 @@ class BaiyangdianDataset(Dataset):
         # Load raw data
         self._load_data()
 
+        # Add properties to store feature dimensions
+        self.input_height = None
+        self.input_width = None
+        self._calculate_input_dimensions()
+
     def _load_data(self) -> None:
         """Load raw data from all files in the data directory."""
         all_data = []
@@ -78,6 +83,21 @@ class BaiyangdianDataset(Dataset):
             return len(self.processed_data)
         raise ValueError("No data has been processed.")
 
+    def _calculate_input_dimensions(self):
+        """Calculate the input dimensions from the processed data."""
+        if self.processed_data is None:
+            raise ValueError("No data has been processed.")
+            
+        # Get the shape of the first feature
+        first_feature = self.processed_data.iloc[0].drop(self.target_column).values
+        # Assuming the feature can be reshaped into a square matrix
+        # Exclude the channel dimension (63)
+        feature_size = len(first_feature) // 63
+        self.input_height = int(feature_size ** 0.5)
+        self.input_width = self.input_height
+        
+        self.logger.info(f"Input dimensions calculated: {self.input_height}x{self.input_width}")
+
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
         """
         Retrieve a single sample from the dataset.
@@ -103,6 +123,9 @@ class BaiyangdianDataset(Dataset):
         # Convert to PyTorch tensors
         feature = torch.tensor(feature, dtype=torch.float32)
         label = torch.tensor(label, dtype=torch.float32)
+
+        # Reshape the feature tensor to (channels, height, width)
+        feature = feature.reshape(63, self.input_height, self.input_width)
         return feature, label
 
 
