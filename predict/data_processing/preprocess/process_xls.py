@@ -30,4 +30,24 @@ def process_xls(df: pd.DataFrame) -> pd.Series:
     return series_clean
 
 def process_xlsx(df: pd.DataFrame) -> pd.Series:
-    pass
+    """
+    Process the DataFrame to retain 'data' values indexed by 'ymd' and
+    output as a one-dimensional Series.
+    
+    Args:
+        df (pd.DataFrame): Input DataFrame containing 'time', 'data', and 'ymd'.
+    
+    Returns:
+        pd.Series: Flattened Series indexed by 'ymd', with NaN values removed.
+    """
+    # Drop the 'time' column as it is not needed
+    if 'time' in df.columns:
+        df = df.drop('time', axis=1)
+    
+    # Use 'ymd' as the index and extract the 'data' column
+    df_processed = df.set_index('ymd')['data']
+    
+    # Ensure the result is a clean Series without NaN
+    series_clean = df_processed.dropna()
+    
+    return series_clean
