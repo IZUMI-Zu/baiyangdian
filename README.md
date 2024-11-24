@@ -45,18 +45,15 @@ This project focuses on predicting water levels in Baiyangdian Lake using a mult
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/baiyangdian-water-level-prediction.git
-
+   git clone https://github.com/IZUMI-Zu/baiyangdian.git
 2. Navigate to the project directory:
 
    ```bash
-   cd baiyangdian-water-level-prediction
-
+   cd baiyangdian
 3. Install dependencies:
 
    ```bash
-   pip install -r requirements.txt
-
+   poetry install
 ## Usage
 
 1. Prepare the Data: Organize your datasets in the /data folder. Refer to the data_format.md for required formats.
@@ -65,16 +62,20 @@ This project focuses on predicting water levels in Baiyangdian Lake using a mult
 
    ```bash
    python train.py --config config.yaml
-
 3. Test the Model:
 
    ```bash
    python test.py --model checkpoint.pth --data test_data.csv
-
 4. Visualize Results:
 
    ```bash
    python visualize.py --input predictions.csv
+## Example Results
+
+| **Model**        | **RMSE** | **MAE** | **R²** |
+|-------------------|----------|----------|-------|
+| Baseline (LSTM)   | 0.32 m   | 0.25 m   | 0.89  |
+| Improved Model    | 0.28 m   | 0.21 m   | 0.92  |
 
 ## Future Work
 
