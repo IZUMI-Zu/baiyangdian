@@ -1,6 +1,4 @@
-from .load_csv import load_csv_data
-from .load_xls_xlsx import load_xls_data, load_xlsx_data
-from .load_nc import load_nc_data
+from .load_data import load_csv_data, load_xls_data, load_xlsx_data, load_nc_data
 
 def load_data(file_path):
     """Load data from file and return as xarray Dataset or pandas DataFrame."""
