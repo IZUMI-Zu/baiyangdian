@@ -3,8 +3,7 @@ from typing import Dict, Tuple
 
 from matplotlib import pyplot as plt
 import numpy as np
-from sklearn.base import r2_score
-from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import torch
 import seaborn as sns
 

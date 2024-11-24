@@ -3,6 +3,6 @@ from .dataset import BaiyangdianDataset, create_data_loaders
 
 __all__ = [
     'load_data',
-    'BaiyangdianDataset'
+    'BaiyangdianDataset',
     'create_data_loaders'
 ]

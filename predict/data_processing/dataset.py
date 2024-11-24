@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Union, Tuple, Callable, Optional
 import logging
 
+from . import load_data
 
 class BaiyangdianDataset(Dataset):
     """
@@ -49,7 +50,7 @@ class BaiyangdianDataset(Dataset):
             for folder in self.data_dir.iterdir():
                 if folder.is_dir():
                     for file in folder.iterdir():
-                        if file.suffix in ['.csv', '.nc']:  # Adjust supported file types as needed
+                        if file.suffix in ['.csv', '.nc', '.xls', '.xlsx']:
                             data = self._load_file(file)
                             all_data.append(data)
 
@@ -69,13 +70,7 @@ class BaiyangdianDataset(Dataset):
 
     def _load_file(self, file_path: Path) -> pd.DataFrame:
         """Load an individual file."""
-        if file_path.suffix == '.csv':
-            return pd.read_csv(file_path)
-        elif file_path.suffix == '.nc':
-            from .load_data import load_nc_data  # Replace with your own NetCDF loader
-            return load_nc_data(file_path)
-        else:
-            raise ValueError(f"Unsupported file type: {file_path.suffix}")
+        return load_data(file_path)
 
     def __len__(self) -> int:
         """Return the number of samples in the dataset."""

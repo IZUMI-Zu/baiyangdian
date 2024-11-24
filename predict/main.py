@@ -1,17 +1,20 @@
+from pathlib import Path
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import argparse
 import logging
 
+
+from .evaluate.evaluate import Evaluator
 from .data_processing import BaiyangdianDataset, create_data_loaders
 from .model.network import WaterLevelCNN
 from .trainer.trainer import Trainer
-from .utils.logger import setup_logging
+from .utils.logger import setup_logger
 
 def main(args):
     # 设置日志
-    setup_logging(args.log_dir)
+    setup_logger(args.log_dir)
     logger = logging.getLogger(__name__)
     
     # 设置设备
@@ -62,6 +65,20 @@ def main(args):
         num_epochs=args.epochs
     )
 
+    evaluator = Evaluator(
+        model=model,
+        device=device,
+        save_dir=args.save_dir / 'evaluation'
+    )
+
+    best_model_path = Path(args.save_dir) / 'best_model.pth'
+    model, _ = Evaluator.load_best_model(model, best_model_path)
+    metrics = evaluator.evaluate(test_loader)
+    
+    logger.info("Test Set Metrics:")
+    for metric_name, value in metrics.items():
+        logger.info(f"{metric_name}: {value:.4f}")
+    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir', type=str, required=True)

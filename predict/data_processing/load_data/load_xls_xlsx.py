@@ -17,3 +17,12 @@ def load_xlsx_data(file_path):
     except Exception as e:
         logger.error(f"Error loading XLSX file: {str(e)}")
         return None
+    
+def load_excel_data(file_path):
+    if str(file_path).endswith('.xls'):
+        return load_xls_data(file_path)
+    elif str(file_path).endswith('.xlsx'):
+        return load_xlsx_data(file_path)
+    else:
+        logger.error(f"Unsupported file type: {file_path}")
+        return None
