@@ -4,7 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def load_nc_data(file_path):
+def load_nc_data(file_path: str):
     """
     从 NetCDF 文件读取数据并转化为 Pandas DataFrame。
     

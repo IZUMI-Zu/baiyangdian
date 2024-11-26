@@ -3,7 +3,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def load_csv_data(file_path):
+def load_csv_data(file_path: str):
     """Load CSV file and return as pandas DataFrame.
     
     Args:
@@ -32,7 +32,7 @@ def load_csv_data(file_path):
         logger.error(f"Error loading CSV file: {str(e)}")
         raise Exception(f"Error loading CSV file: {str(e)}")
 
-def process_reservoir_data(df):
+def process_reservoir_data(df: pd.DataFrame):
     """Process reservoir data by translating headers and converting data types.
     
     Args:
