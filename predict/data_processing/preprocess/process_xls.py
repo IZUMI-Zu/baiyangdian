@@ -20,7 +20,7 @@ def process_xls(df: pd.DataFrame) -> pd.Series:
     
     # Transpose the DataFrame so months are in rows and days are in columns
     df_transposed = df.T
-    
+    # TODO: process indsx with year.
     # Flatten the DataFrame into a one-dimensional Series
     series_flattened = df_transposed.stack()
     
@@ -38,7 +38,7 @@ def process_xlsx(df: pd.DataFrame) -> pd.Series:
         df (pd.DataFrame): Input DataFrame containing 'time', 'data', and 'ymd'.
     
     Returns:
-        pd.Series: Flattened Series indexed by 'ymd', with NaN values removed.
+        pd.Series: Flattened Series indexed by 'ymd'.
     """
     # Drop the 'time' column as it is not needed
     if 'time' in df.columns:
