@@ -47,7 +47,4 @@ def process_xlsx(df: pd.DataFrame) -> pd.Series:
     # Use 'ymd' as the index and extract the 'data' column
     df_processed = df.set_index('ymd')['data']
     
-    # Ensure the result is a clean Series without NaN
-    series_clean = df_processed.dropna()
-    
-    return series_clean
+    return df_processed
